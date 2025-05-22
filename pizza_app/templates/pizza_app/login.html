@@ -3,46 +3,77 @@
 {% block title %}Login - Pizza Paradise{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg border-0">
-                <div class="card-body p-5">
-                    <h2 class="text-center mb-4">Log In</h2>
-                    
-                    <form method="post">
-                        {% csrf_token %}
-                        
-                        <div class="mb-3">
-                            <label for="id_username" class="form-label">Username</label>
-                            <input type="text" name="username" id="id_username" class="form-control" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="id_password" class="form-label">Password</label>
-                            <input type="password" name="password" id="id_password" class="form-control" required>
-                        </div>
-                        
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary py-2">Log In</button>
-                        </div>
-                        
-                        {% if form.errors %}
-                            <div class="alert alert-danger mt-3">
-                                <p class="mb-0">Your username and password didn't match. Please try again.</p>
-                            </div>
-                        {% endif %}
-                    </form>
-                    
-                    <div class="mt-4 text-center">
-                        <p class="mb-0">
-                            Don't have an account? 
-                            <a href="{% url 'register' %}" class="text-decoration-none" style="color: var(--pizza-red);">
-                                Register here
-                            </a>
-                        </p>
-                    </div>
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8">
+        <div class="text-center">
+            <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Welcome Back</h2>
+            <p class="text-sm text-gray-500 mb-8">Sign in to your account to order your favorite pizza</p>
+        </div>
+        
+        {% if form.errors %}
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-2a6 6 0 100-12 6 6 0 000 12zm0-9a1 1 0 011 1v4a1 1 0 11-2 0V8a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
                 </div>
+                <div class="ml-3">
+                    <p class="text-sm text-red-700">
+                        Your username and password didn't match. Please try again.
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            
+            <div>
+                <label for="id_username" class="block text-sm font-medium text-gray-700">Username</label>
+                <div class="mt-1">
+                    <input type="text" name="username" id="id_username" required 
+                           class="appearance-none block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-pizza-red focus:border-pizza-red sm:text-sm">
+                </div>
+            </div>
+            
+            <div>
+                <div class="flex items-center justify-between">
+                    <label for="id_password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <a href="#" class="text-sm font-medium text-pizza-red hover:text-red-600">
+                        Forgot password?
+                    </a>
+                </div>
+                <div class="mt-1">
+                    <input type="password" name="password" id="id_password" required 
+                           class="appearance-none block w-full px-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-pizza-red focus:border-pizza-red sm:text-sm">
+                </div>
+            </div>
+            
+            <div>
+                <button type="submit" 
+                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-pizza-red hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pizza-red transition duration-150 ease-in-out">
+                    Sign In
+                </button>
+            </div>
+        </form>
+        
+        <div class="mt-8 border-t border-gray-200 pt-6">
+            <p class="text-center text-sm text-gray-600">
+                Don't have an account?
+                <a href="{% url 'register' %}" class="font-medium text-pizza-red hover:text-red-700">
+                    Create one now
+                </a>
+            </p>
+            <div class="mt-6 flex justify-center space-x-4">
+                <a href="/" class="text-sm font-medium text-gray-500 hover:text-gray-700">
+                    Return to Home
+                </a>
+                <span class="text-gray-300">|</span>
+                <a href="{% url 'menu' %}" class="text-sm font-medium text-gray-500 hover:text-gray-700">
+                    Browse Menu
+                </a>
             </div>
         </div>
     </div>
