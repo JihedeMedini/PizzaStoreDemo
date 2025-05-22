@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib import messages
 from django.db.models import Sum
+import os
 from .models import (
     Pizza, Size, Topping, Drink, 
     Order, OrderItem, OrderItemTopping,
@@ -37,17 +38,101 @@ def register(request):
 
 def menu(request):
     """Display the menu with pizzas and drinks."""
-    pizzas = Pizza.objects.filter(available=True)
-    drinks = Drink.objects.filter(available=True)
+    # Check if running on Vercel with in-memory database
+    IS_VERCEL = os.environ.get('VERCEL')
     
-    # Get all sizes for the size selection
-    sizes = Size.objects.all()
+    if IS_VERCEL:
+        # For demo purpose on Vercel, create sample data in memory
+        try:
+            # Check if we already have sample data
+            if not Pizza.objects.exists():
+                # Create sizes
+                small = Size.objects.create(name='Small', price_factor=0.8)
+                medium = Size.objects.create(name='Medium', price_factor=1.0)
+                large = Size.objects.create(name='Large', price_factor=1.2)
+                
+                # Create toppings
+                pepperoni = Topping.objects.create(name='Pepperoni', price=1.5, available=True)
+                mushrooms = Topping.objects.create(name='Mushrooms', price=1.0, available=True)
+                onions = Topping.objects.create(name='Onions', price=0.75, available=True)
+                olives = Topping.objects.create(name='Olives', price=1.0, available=True)
+                
+                # Create pizzas
+                margherita = Pizza.objects.create(
+                    name='Margherita',
+                    description='Classic pizza with tomato sauce and mozzarella cheese',
+                    base_price=10.0,
+                    image_url='https://images.unsplash.com/photo-1604382354936-07c5d9983bd3',
+                    available=True
+                )
+                margherita.available_toppings.add(pepperoni, mushrooms, onions, olives)
+                
+                pepperoni_pizza = Pizza.objects.create(
+                    name='Pepperoni',
+                    description='Pizza with tomato sauce, mozzarella cheese and pepperoni',
+                    base_price=12.0,
+                    image_url='https://images.unsplash.com/photo-1628840042765-356cda07504e',
+                    available=True
+                )
+                pepperoni_pizza.available_toppings.add(mushrooms, onions, olives)
+                
+                veggie = Pizza.objects.create(
+                    name='Vegetarian',
+                    description='Pizza with tomato sauce, mozzarella cheese, mushrooms, onions, and olives',
+                    base_price=11.0,
+                    image_url='https://images.unsplash.com/photo-1511689660979-10d2b1aada49',
+                    available=True
+                )
+                veggie.available_toppings.add(mushrooms, onions, olives)
+                
+                # Create drinks
+                water = Drink.objects.create(
+                    name='Water',
+                    description='Bottled water',
+                    price=1.5,
+                    image_url='https://images.unsplash.com/photo-1615114814213-a245ffc79e9a',
+                    available=True
+                )
+                
+                soda = Drink.objects.create(
+                    name='Soda',
+                    description='Carbonated soft drink',
+                    price=2.0,
+                    image_url='https://images.unsplash.com/photo-1581006852262-e4307cf6283a',
+                    available=True
+                )
+                
+                juice = Drink.objects.create(
+                    name='Orange Juice',
+                    description='Freshly squeezed orange juice',
+                    price=2.5,
+                    image_url='https://images.unsplash.com/photo-1600271886742-f049cd451bba',
+                    available=True
+                )
+        except Exception as e:
+            # In case of any database errors, log them
+            print(f"Error creating sample data: {e}")
     
-    context = {
-        'pizzas': pizzas,
-        'drinks': drinks,
-        'sizes': sizes,
-    }
+    # Now retrieve the data
+    try:
+        pizzas = Pizza.objects.filter(available=True)
+        drinks = Drink.objects.filter(available=True)
+        sizes = Size.objects.all()
+        
+        context = {
+            'pizzas': pizzas,
+            'drinks': drinks,
+            'sizes': sizes,
+        }
+    except Exception as e:
+        # Fallback in case of any database errors
+        context = {
+            'error': 'Unable to load menu data',
+            'error_details': str(e),
+            'pizzas': [],
+            'drinks': [],
+            'sizes': [],
+        }
     
     return render(request, 'pizza_app/menu.html', context)
 

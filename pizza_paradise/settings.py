@@ -75,12 +75,25 @@ WSGI_APPLICATION = "pizza_paradise.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+# Check if we're running on Vercel
+IS_VERCEL = os.environ.get('VERCEL')
+
+if IS_VERCEL:
+    # Use dummy DB for Vercel - read only
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',  # Use in-memory SQLite database
+        }
     }
-}
+else:
+    # Default SQLite database for development
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 
 # Password validation
