@@ -122,4 +122,4 @@ pizza_paradise/
 1. Log in to the admin interface
 2. Manage menu items (add, update, delete)
 3. View and update order statuses
-4. Manage user accounts 
+4. Manage user accounts
