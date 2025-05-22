@@ -1,0 +1,172 @@
+{% extends 'pizza_app/base.html' %}
+
+{% block title %}Shopping Cart - Pizza Paradise{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <h1 class="text-3xl font-bold mb-8">Your Cart</h1>
+    
+    {% if cart_items %}
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-8">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <h2 class="text-xl font-bold mb-6">Cart Items ({{ cart_items|length }})</h2>
+                        
+                        {% for item in cart_items %}
+                            <div class="flex border-b border-gray-200 pb-4 mb-4 {% if forloop.last %}border-0{% endif %}">
+                                <div class="w-20 h-20 flex-shrink-0 mr-4">
+                                    {% if item.item_type == 'pizza' %}
+                                        <img src="{{ item.pizza.image_url }}" class="w-full h-full object-cover rounded-md" alt="{{ item.pizza.name }}">
+                                    {% else %}
+                                        <img src="{{ item.drink.image_url }}" class="w-full h-full object-cover rounded-md" alt="{{ item.drink.name }}">
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="flex-grow">
+                                    <h3 class="font-bold mb-1">
+                                        {% if item.item_type == 'pizza' %}
+                                            {{ item.pizza.name }} ({{ item.pizza_size.name }})
+                                        {% else %}
+                                            {{ item.drink.name }} - {{ item.drink.size }}
+                                        {% endif %}
+                                    </h3>
+                                    
+                                    {% if item.item_type == 'pizza' and item.toppings.exists %}
+                                        <div class="text-sm text-gray-600 mb-2">
+                                            <span class="font-medium">Toppings:</span>
+                                            {% for topping_item in item.toppings.all %}
+                                                {{ topping_item.topping.name }}{% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <div class="flex items-center">
+                                        <form method="post" action="{% url 'update_cart_item' item.id %}" class="flex items-center">
+                                            {% csrf_token %}
+                                            <span class="mr-2 text-sm">Qty:</span>
+                                            <div class="flex items-center mr-3 w-28">
+                                                <button type="button" class="quantity-btn bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded-l-md"
+                                                        data-action="decrease" data-item-id="{{ item.id }}">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" 
+                                                       class="w-full text-center border-t border-b border-gray-300 py-1 focus:outline-none quantity-input" 
+                                                       data-item-id="{{ item.id }}">
+                                                <button type="button" class="quantity-btn bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded-r-md"
+                                                        data-action="increase" data-item-id="{{ item.id }}">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                            <button type="submit" class="update-cart-btn hidden bg-pizza-red hover:bg-red-700 text-white text-sm px-2 py-1 rounded-md" 
+                                                    data-item-id="{{ item.id }}">Update</button>
+                                        </form>
+                                        
+                                        <a href="{% url 'remove_from_cart' item.id %}" class="ml-auto bg-gray-200 hover:bg-gray-300 text-red-600 text-sm px-3 py-1 rounded-md flex items-center">
+                                            <i class="fas fa-trash-alt mr-1"></i> Remove
+                                        </a>
+                                    </div>
+                                </div>
+                                
+                                <div class="ml-4 text-right">
+                                    <span class="text-pizza-red font-bold">${{ item.total_price|floatformat:2 }}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lg:col-span-4">
+                <div class="bg-white rounded-lg shadow-md sticky top-5">
+                    <div class="p-6">
+                        <h2 class="text-xl font-bold mb-6">Order Summary</h2>
+                        
+                        <div class="flex justify-between mb-2">
+                            <span>Subtotal:</span>
+                            <span>${{ total|floatformat:2 }}</span>
+                        </div>
+                        
+                        <div class="flex justify-between border-b border-gray-200 pb-3 mb-4">
+                            <span>Delivery:</span>
+                            <span>Free</span>
+                        </div>
+                        
+                        <div class="flex justify-between mb-6 font-bold">
+                            <span>Total:</span>
+                            <span class="text-pizza-red">${{ total|floatformat:2 }}</span>
+                        </div>
+                        
+                        <a href="{% url 'checkout' %}" class="block bg-pizza-red hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg text-center mb-3 transition duration-300">
+                            Proceed to Checkout
+                        </a>
+                        
+                        <a href="{% url 'menu' %}" class="block bg-white hover:bg-gray-100 text-gray-800 font-medium py-3 px-4 rounded-lg text-center border border-gray-300 transition duration-300">
+                            Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="bg-white rounded-lg shadow-md">
+            <div class="p-12 text-center">
+                <i class="fas fa-shopping-cart text-gray-400 text-5xl mb-4"></i>
+                <h2 class="text-2xl font-bold mb-3">Your cart is empty</h2>
+                <p class="text-gray-600 mb-6">Looks like you haven't added any items to your cart yet.</p>
+                <a href="{% url 'menu' %}" class="bg-pizza-red hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                    Browse Our Menu
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if cart_items %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const quantityBtns = document.querySelectorAll('.quantity-btn');
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+        const updateCartBtns = document.querySelectorAll('.update-cart-btn');
+        
+        // Handle quantity buttons
+        quantityBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const itemId = btn.dataset.itemId;
+                const action = btn.dataset.action;
+                const input = document.querySelector(`.quantity-input[data-item-id="${itemId}"]`);
+                const updateBtn = document.querySelector(`.update-cart-btn[data-item-id="${itemId}"]`);
+                
+                let currentValue = parseInt(input.value);
+                
+                if (action === 'increase') {
+                    input.value = currentValue + 1;
+                } else if (action === 'decrease' && currentValue > 1) {
+                    input.value = currentValue - 1;
+                }
+                
+                // Show update button
+                updateBtn.classList.remove('hidden');
+            });
+        });
+        
+        // Handle quantity input changes
+        quantityInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                const itemId = input.dataset.itemId;
+                const updateBtn = document.querySelector(`.update-cart-btn[data-item-id="${itemId}"]`);
+                
+                if (parseInt(input.value) < 1) {
+                    input.value = 1;
+                }
+                
+                // Show update button
+                updateBtn.classList.remove('hidden');
+            });
+        });
+    });
+</script>
+{% endif %}
+{% endblock %}

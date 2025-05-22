@@ -1,0 +1,159 @@
+{% extends "admin/login.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  body.login {
+    background: #F7F9FC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .login #container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    width: 400px;
+    max-width: 90vw;
+    overflow: hidden;
+  }
+  
+  .login #header {
+    background: #003366;
+    color: white;
+    padding: 30px 40px;
+    position: relative;
+    text-align: center;
+  }
+  
+  .login #header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(to right, #D62828 20%, #ffffff 20%, #ffffff 40%, #003366 40%, #003366 60%, #ffffff 60%, #ffffff 80%, #D62828 80%);
+  }
+  
+  .login #header h1 {
+    font-size: 24px;
+    margin: 0;
+    font-weight: 500;
+  }
+  
+  .login #content {
+    padding: 30px 40px;
+  }
+  
+  .login .form-row {
+    padding: 10px 0;
+  }
+  
+  .login .form-row label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 14px;
+  }
+  
+  .login .form-row input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+  }
+  
+  .login .form-row input:focus {
+    border-color: #D62828;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(214, 40, 40, 0.1);
+  }
+  
+  .login .submit-row {
+    padding: 20px 0 0;
+  }
+  
+  .login .submit-row input {
+    background: #D62828;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 12px 20px;
+    width: 100%;
+    transition: background 0.3s;
+  }
+  
+  .login .submit-row input:hover {
+    background: #F77F00;
+  }
+  
+  .login .errornote {
+    background: #ffebee;
+    border: 1px solid #ffcdd2;
+    border-radius: 4px;
+    color: #d32f2f;
+    padding: 12px;
+    margin: 0 0 20px;
+  }
+  
+  .pizza-logo {
+    display: block;
+    margin: 0 auto 15px;
+    width: 70px;
+    height: 70px;
+    background-color: white;
+    border-radius: 50%;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-footer {
+    background: #f5f5f5;
+    padding: 15px;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .norwegian-greeting {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 15px;
+    color: #666;
+    font-style: italic;
+  }
+</style>
+{% endblock %}
+
+{% block branding %}
+<div class="pizza-logo">
+  <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="#D62828">
+    <path d="M158.87.15c-16.16-1.52-31.2 8.42-35.33 24.12l-14.81 56.27c187.62 5.49 314.54 130.61 322.48 317l56.94-15.78c15.72-4.36 25.49-19.68 23.62-35.9C490.89 165.08 340.78 17.32 158.87.15zm-58.47 112L.55 491.64a16.21 16.21 0 0 0 20 19.75l379-105.1c-4.27-174.89-123.08-292.14-299.15-294.1zM128 416a32 32 0 1 1 32-32 32 32 0 0 1-32 32zm48-152a32 32 0 1 1 32-32 32 32 0 0 1-32 32zm104 104a32 32 0 1 1 32-32 32 32 0 0 1-32 32z"/>
+  </svg>
+</div>
+<h1 id="site-name">Pizza Paradise Admin</h1>
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+
+<div class="norwegian-greeting">
+  "Velkommen til Pizza Paradise administrasjonspanel"
+</div>
+
+<div class="login-footer">
+  &copy; {% now "Y" %} Pizza Paradise - Norges beste pizza
+</div>
+{% endblock %} 

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Paradise - Fresh & Delicious</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pizza: {
+                            red: '#D62828',
+                            orange: '#F77F00',
+                            yellow: '#FCBF49',
+                            cream: '#EAE2B7'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-pizza-cream min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-pizza-slice text-pizza-red text-2xl mr-2"></i>
+                <span class="font-bold text-xl text-pizza-red">Pizza Paradise</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="index.html" class="text-gray-800 hover:text-pizza-red font-medium">Home</a>
+                <a href="menu.html" class="text-gray-800 hover:text-pizza-red font-medium">Menu</a>
+                <a href="#" class="text-gray-800 hover:text-pizza-red font-medium">About</a>
+                <a href="#" class="text-gray-800 hover:text-pizza-red font-medium">Contact</a>
+            </div>
+            <div class="md:hidden">
+                <button class="text-gray-600 focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative bg-gray-900 text-white">
+        <div class="absolute inset-0 bg-black opacity-60"></div>
+        <div class="bg-[url('https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center h-[500px] md:h-[600px]">
+            <div class="container mx-auto px-4 h-full flex flex-col items-center justify-center relative z-10">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4 text-center">The Best Pizza in Town</h1>
+                <p class="text-xl md:text-2xl mb-8 text-center max-w-2xl">Handcrafted with love using fresh ingredients and authentic recipes</p>
+                <a href="menu.html" class="bg-pizza-red hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full text-lg transition duration-300 transform hover:scale-105">
+                    View Our Menu
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Why Choose Pizza Paradise?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="flex flex-col items-center text-center p-6 rounded-lg shadow-lg">
+                    <i class="fas fa-medal text-pizza-orange text-4xl mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Premium Quality</h3>
+                    <p class="text-gray-600">We use only the finest ingredients to make our delicious pizzas.</p>
+                </div>
+                <div class="flex flex-col items-center text-center p-6 rounded-lg shadow-lg">
+                    <i class="fas fa-truck text-pizza-orange text-4xl mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Fast Delivery</h3>
+                    <p class="text-gray-600">Hot and fresh pizza delivered to your doorstep in 30 minutes or less.</p>
+                </div>
+                <div class="flex flex-col items-center text-center p-6 rounded-lg shadow-lg">
+                    <i class="fas fa-smile-beam text-pizza-orange text-4xl mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Customer Satisfaction</h3>
+                    <p class="text-gray-600">We pride ourselves on making our customers happy with every bite.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Offer -->
+    <section class="py-16 bg-pizza-yellow">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h2 class="text-3xl font-bold mb-4">Special Offer</h2>
+                    <p class="text-xl mb-6">Get 20% off on your first order when you order online!</p>
+                    <a href="menu.html" class="bg-pizza-red hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full text-lg transition duration-300">
+                        Order Now
+                    </a>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1014&q=80" alt="Special offer pizza" class="rounded-lg shadow-xl w-full h-auto">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-auto">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-pizza-slice text-pizza-red text-2xl mr-2"></i>
+                        <span class="font-bold text-xl">Pizza Paradise</span>
+                    </div>
+                    <p class="text-gray-400 max-w-xs">Serving delicious pizzas since 2010. Quality ingredients, authentic recipes.</p>
+                </div>
+                <div class="mb-6 md:mb-0">
+                    <h3 class="font-semibold text-lg mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="menu.html" class="text-gray-400 hover:text-white">Menu</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">About</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-lg mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>&copy; 2023 Pizza Paradise. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 

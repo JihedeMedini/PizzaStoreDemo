@@ -1,0 +1,192 @@
+{% extends 'pizza_app/base.html' %}
+
+{% block title %}Contact Us - Pizza Paradise{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <!-- Hero Section -->
+    <div class="bg-pizza-red rounded-lg shadow-lg overflow-hidden mb-12">
+        <div class="md:flex">
+            <div class="md:w-1/2 p-12 flex items-center">
+                <div class="text-white">
+                    <h1 class="text-4xl font-bold mb-4">Get in Touch</h1>
+                    <p class="text-xl mb-6">We'd love to hear from you! Reach out for questions, feedback, or to book a table.</p>
+                    <div class="flex">
+                        <div class="h-1 w-12 bg-white rounded mr-2"></div>
+                        <div class="h-1 w-24 bg-white rounded"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="md:w-1/2 h-96">
+                <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" 
+                     alt="Restaurant interior" 
+                     class="w-full h-full object-cover">
+            </div>
+        </div>
+    </div>
+    
+    <div class="max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            <!-- Contact Form -->
+            <div class="bg-white rounded-lg shadow-md p-8">
+                <h2 class="text-2xl font-bold mb-6">Send us a Message</h2>
+                
+                <form>
+                    <div class="mb-4">
+                        <label for="name" class="block text-gray-700 font-medium mb-2">Name</label>
+                        <input type="text" id="name" name="name" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pizza-red focus:border-transparent">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
+                        <input type="email" id="email" name="email" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pizza-red focus:border-transparent">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="subject" class="block text-gray-700 font-medium mb-2">Subject</label>
+                        <input type="text" id="subject" name="subject" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pizza-red focus:border-transparent">
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label for="message" class="block text-gray-700 font-medium mb-2">Message</label>
+                        <textarea id="message" name="message" rows="5" required
+                                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pizza-red focus:border-transparent"></textarea>
+                    </div>
+                    
+                    <button type="submit" 
+                            class="bg-pizza-red hover:bg-red-700 text-white font-medium py-2 px-6 rounded-full transition duration-200">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Contact Information -->
+            <div>
+                <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+                    <h2 class="text-2xl font-bold mb-6">Contact Information</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="flex">
+                            <div class="text-pizza-red mr-4">
+                                <i class="fas fa-map-marker-alt text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium">Address</h3>
+                                <p class="text-gray-600">
+                                    Storgata 23<br>
+                                    0182 Oslo<br>
+                                    Norway
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <div class="text-pizza-red mr-4">
+                                <i class="fas fa-phone text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium">Phone</h3>
+                                <p class="text-gray-600">+47 22 33 44 55</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <div class="text-pizza-red mr-4">
+                                <i class="fas fa-envelope text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium">Email</h3>
+                                <p class="text-gray-600">info@pizzaparadise.no</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <div class="text-pizza-red mr-4">
+                                <i class="fas fa-clock text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium">Opening Hours</h3>
+                                <p class="text-gray-600">
+                                    Monday - Thursday: 11:00 - 22:00<br>
+                                    Friday - Saturday: 11:00 - 23:00<br>
+                                    Sunday: 12:00 - 21:00
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-8">
+                    <h2 class="text-2xl font-bold mb-6">Follow Us</h2>
+                    
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-3xl text-pizza-red hover:text-red-700 transition duration-200">
+                            <i class="fab fa-facebook-square"></i>
+                        </a>
+                        <a href="#" class="text-3xl text-pizza-red hover:text-red-700 transition duration-200">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-3xl text-pizza-red hover:text-red-700 transition duration-200">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-3xl text-pizza-red hover:text-red-700 transition duration-200">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Map -->
+        <div class="rounded-lg overflow-hidden shadow-md h-96 mb-8">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1999.8056244711083!2d10.7428792!3d59.9168996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46416e7913e2a529%3A0xd5e3f53ba451340a!2sStorgata%2C%200182%20Oslo%2C%20Norway!5e0!3m2!1sen!2s!4v1684644347976!5m2!1sen!2s" 
+                width="100%" 
+                height="100%" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+        
+        <!-- FAQ -->
+        <div class="bg-white rounded-lg shadow-md p-8">
+            <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-lg font-bold mb-2">Do you offer gluten-free options?</h3>
+                    <p class="text-gray-600">
+                        Yes, we offer gluten-free pizza crusts. Please inform our staff about any allergies or dietary restrictions.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-2">Do you deliver?</h3>
+                    <p class="text-gray-600">
+                        Yes, we deliver within Oslo city limits. Delivery is free for orders over 300 NOK.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-2">Can we make reservations?</h3>
+                    <p class="text-gray-600">
+                        Absolutely! You can make a reservation by calling us or using the form on this page.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-2">Do you have vegan options?</h3>
+                    <p class="text-gray-600">
+                        We do! We offer plant-based cheese and a variety of vegetable toppings for our vegan customers.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

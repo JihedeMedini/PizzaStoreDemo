@@ -1,0 +1,131 @@
+{% extends 'pizza_app/base.html' %}
+
+{% block title %}About Us - Pizza Paradise{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <!-- Hero Section -->
+    <div class="bg-pizza-red rounded-lg shadow-lg overflow-hidden mb-12">
+        <div class="md:flex">
+            <div class="md:w-1/2 p-12 flex items-center">
+                <div class="text-white">
+                    <h1 class="text-4xl font-bold mb-4">Our Norwegian Heritage</h1>
+                    <p class="text-xl mb-6">Pizza Paradise brings a taste of Norway to your table since 2010.</p>
+                    <div class="flex">
+                        <div class="h-1 w-12 bg-white rounded mr-2"></div>
+                        <div class="h-1 w-24 bg-white rounded"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="md:w-1/2 h-96">
+                <img src="https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" 
+                     alt="Norwegian landscape" 
+                     class="w-full h-full object-cover">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Our Story -->
+    <div class="max-w-4xl mx-auto mb-16">
+        <h2 class="text-3xl font-bold mb-6 text-center">Our Story</h2>
+        
+        <div class="prose prose-lg max-w-none">
+            <p class="mb-4">
+                Pizza Paradise was founded in Oslo in 2010 by the Andersen family, who brought together their passion for traditional 
+                Norwegian ingredients and their love for Italian pizza. What started as a small family pizzeria has now grown into multiple 
+                locations across Norway, each maintaining our commitment to quality and tradition.
+            </p>
+            
+            <p class="mb-4">
+                At Pizza Paradise, we believe that great food comes from great ingredients. That's why we source the freshest 
+                produce from local Norwegian farms and fisheries. Our seafood pizzas feature the finest Norwegian salmon and cod, 
+                while our meat toppings come from ethically raised livestock from the Norwegian countryside.
+            </p>
+            
+            <p class="mb-8">
+                Our dough is made fresh daily using a secret recipe that's been in the family for generations. We let it 
+                rise for 24 hours to develop that perfect texture and flavor that our customers have come to love.
+            </p>
+        </div>
+    </div>
+    
+    <!-- Values -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        <div class="bg-white p-8 rounded-lg shadow-md text-center">
+            <div class="text-pizza-red text-4xl mb-4">
+                <i class="fas fa-leaf"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Norwegian Quality</h3>
+            <p class="text-gray-600">
+                We proudly use local Norwegian ingredients, supporting farmers and producers from across our beautiful country.
+            </p>
+        </div>
+        
+        <div class="bg-white p-8 rounded-lg shadow-md text-center">
+            <div class="text-pizza-red text-4xl mb-4">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Traditional Craft</h3>
+            <p class="text-gray-600">
+                Our recipes blend Norwegian traditions with Italian techniques, creating a unique and delicious fusion.
+            </p>
+        </div>
+        
+        <div class="bg-white p-8 rounded-lg shadow-md text-center">
+            <div class="text-pizza-red text-4xl mb-4">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Community Spirit</h3>
+            <p class="text-gray-600">
+                We embrace the Norwegian values of "dugnad" (community work) and "koselig" (coziness) in everything we do.
+            </p>
+        </div>
+    </div>
+    
+    <!-- Team -->
+    <div class="max-w-5xl mx-auto">
+        <h2 class="text-3xl font-bold mb-8 text-center">Meet Our Team</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white rounded-lg overflow-hidden shadow-md">
+                <img src="https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
+                     alt="Owner" 
+                     class="w-full h-64 object-cover object-center">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-1">Magnus Andersen</h3>
+                    <p class="text-gray-600 mb-3">Founder & Head Chef</p>
+                    <p class="text-gray-700">
+                        Born and raised in Bergen, Magnus brings 30 years of culinary expertise to our pizzas.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg overflow-hidden shadow-md">
+                <img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" 
+                     alt="Chef" 
+                     class="w-full h-64 object-cover object-center">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-1">Ingrid Larsen</h3>
+                    <p class="text-gray-600 mb-3">Executive Chef</p>
+                    <p class="text-gray-700">
+                        Ingrid perfected her craft in Italy before bringing her skills back to Norway.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg overflow-hidden shadow-md">
+                <img src="https://images.unsplash.com/photo-1566554273541-37a9ca77b91f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80" 
+                     alt="Manager" 
+                     class="w-full h-64 object-cover object-center">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-1">Erik Olsen</h3>
+                    <p class="text-gray-600 mb-3">Restaurant Manager</p>
+                    <p class="text-gray-700">
+                        Erik ensures every customer experiences true Norwegian hospitality with every visit.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

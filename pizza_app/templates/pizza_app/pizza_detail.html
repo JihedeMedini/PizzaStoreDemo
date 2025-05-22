@@ -1,0 +1,178 @@
+{% extends 'pizza_app/base.html' %}
+
+{% block title %}{{ pizza.name }} - Pizza Paradise{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div>
+            <img src="{{ pizza.image_url }}" alt="{{ pizza.name }}" class="w-full h-auto rounded-lg shadow-lg">
+        </div>
+        
+        <div>
+            <h1 class="text-3xl font-bold mb-3">{{ pizza.name }}</h1>
+            <p class="text-gray-600 text-lg mb-6">{{ pizza.description }}</p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="pizza" value="{{ pizza.id }}">
+                
+                <!-- Size Selection -->
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold mb-3">Select Size</h3>
+                    <div class="flex flex-wrap gap-3">
+                        {% for size in sizes %}
+                        <label class="relative">
+                            <input type="radio" name="size" value="{{ size.id }}" class="absolute opacity-0" 
+                                   {% if forloop.first %}checked{% endif %}
+                                   data-price="{{ pizza.base_price|floatformat:2 }}" 
+                                   data-multiplier="{{ size.price_multiplier|floatformat:2 }}">
+                            <span class="size-label px-4 py-2 rounded-full border border-gray-300 cursor-pointer hover:bg-gray-100 inline-block 
+                                 {% if forloop.first %}size-active{% endif %}">
+                                {{ size.name }}
+                            </span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Toppings Selection -->
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold mb-3">Add Toppings</h3>
+                    {% if pizza.available_toppings.exists %}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {% for topping in pizza.available_toppings.all %}
+                            <div>
+                                <label class="flex items-center justify-between p-2 border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer">
+                                    <div class="flex items-center">
+                                        <input type="checkbox" name="topping_{{ topping.id }}" id="topping_{{ topping.id }}" 
+                                               class="topping-checkbox form-checkbox h-5 w-5 text-pizza-red rounded"
+                                               data-base-price="{{ topping.small_price|floatformat:2 }}">
+                                        <span class="ml-2">{{ topping.name }}</span>
+                                    </div>
+                                    <span class="topping-price text-gray-600">+${{ topping.small_price|floatformat:2 }}</span>
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-gray-500">No additional toppings available for this pizza.</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Quantity -->
+                <div class="flex items-center gap-2">
+                    <span class="text-sm">Quantity:</span>
+                    <div class="flex items-center">
+                        <button type="button" class="quantity-btn bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded-l-md" data-action="decrease">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <input type="number" name="quantity" value="1" min="1" max="10" class="w-12 text-center border-t border-b border-gray-300 py-1 focus:outline-none">
+                        <button type="button" class="quantity-btn bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded-r-md" data-action="increase">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Price and Add to Cart -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold">Total: <span class="text-pizza-red" id="total-price">${{ pizza.base_price|floatformat:2 }}</span></h3>
+                    </div>
+                    <div class="mt-6 flex gap-3">
+                        <button type="submit" class="bg-pizza-red hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 flex items-center">
+                            <i class="fas fa-shopping-cart mr-2"></i>
+                            Add to Cart
+                        </button>
+                        <a href="{% url 'menu' %}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-6 rounded-full transition duration-300">
+                            Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sizeRadios = document.querySelectorAll('input[name="size"]');
+        const sizeLabels = document.querySelectorAll('.size-label');
+        const toppingCheckboxes = document.querySelectorAll('.topping-checkbox');
+        const toppingPrices = document.querySelectorAll('.topping-price');
+        const quantityInput = document.getElementById('quantity-input');
+        const quantityBtns = document.querySelectorAll('.quantity-btn');
+        const totalPriceDisplay = document.getElementById('total-price');
+        
+        // Update total price
+        function updateTotalPrice() {
+            const selectedSize = document.querySelector('input[name="size"]:checked');
+            const basePrice = parseFloat(selectedSize.dataset.price);
+            const multiplier = parseFloat(selectedSize.dataset.multiplier);
+            const quantity = parseInt(quantityInput.value);
+            
+            let toppingsTotal = 0;
+            toppingCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    const toppingBasePrice = parseFloat(checkbox.dataset.basePrice);
+                    toppingsTotal += toppingBasePrice * multiplier;
+                }
+            });
+            
+            const itemPrice = (basePrice * multiplier) + toppingsTotal;
+            const total = itemPrice * quantity;
+            
+            totalPriceDisplay.textContent = '$' + total.toFixed(2);
+            
+            // Update topping prices display
+            toppingCheckboxes.forEach((checkbox, index) => {
+                const toppingBasePrice = parseFloat(checkbox.dataset.basePrice);
+                const adjustedPrice = toppingBasePrice * multiplier;
+                toppingPrices[index].textContent = '+$' + adjustedPrice.toFixed(2);
+            });
+        }
+        
+        // Update size selection visually
+        sizeRadios.forEach((radio, index) => {
+            radio.addEventListener('change', function() {
+                sizeLabels.forEach(label => label.classList.remove('size-active'));
+                if (this.checked) {
+                    sizeLabels[index].classList.add('size-active');
+                }
+                updateTotalPrice();
+            });
+        });
+        
+        toppingCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateTotalPrice);
+        });
+        
+        quantityBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = btn.dataset.action;
+                let currentValue = parseInt(quantityInput.value);
+                
+                if (action === 'increase') {
+                    quantityInput.value = currentValue + 1;
+                } else if (action === 'decrease' && currentValue > 1) {
+                    quantityInput.value = currentValue - 1;
+                }
+                
+                updateTotalPrice();
+            });
+        });
+        
+        quantityInput.addEventListener('change', function() {
+            if (parseInt(this.value) < 1) {
+                this.value = 1;
+            }
+            updateTotalPrice();
+        });
+        
+        // Initialize
+        updateTotalPrice();
+    });
+</script>
+{% endblock %} 

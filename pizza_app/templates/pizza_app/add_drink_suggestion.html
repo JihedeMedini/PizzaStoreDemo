@@ -1,0 +1,58 @@
+{% extends 'pizza_app/base.html' %}
+
+{% block title %}Add a Drink? - Pizza Paradise{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+        <!-- Success Message -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+            <div class="bg-pizza-red text-white p-6">
+                <h1 class="text-2xl font-bold">Pizza Added to Cart!</h1>
+                <p class="mt-2">Your {{ pizza.name }} has been added to your cart.</p>
+            </div>
+            
+            <div class="p-6">
+                <h2 class="text-xl font-bold mb-4">Would you like to add a drink?</h2>
+                <p class="mb-6 text-gray-600">Complete your meal with a refreshing beverage.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+                    {% for drink in drinks %}
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                        <img src="{{ drink.image_url }}" alt="{{ drink.name }}" class="w-full h-40 object-cover">
+                        <div class="p-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-lg font-bold">{{ drink.name }}</h3>
+                                <span class="text-pizza-red font-bold">${{ drink.price|floatformat:2 }}</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4">{{ drink.size }}</p>
+                            
+                            <div class="mt-4 flex justify-between">
+                                <form method="post" action="{% url 'add_drink_to_cart' drink.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="drink" value="{{ drink.id }}">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="bg-pizza-red hover:bg-red-700 text-white font-medium py-2 px-4 rounded-full transition duration-200">
+                                        Add to Cart
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Action buttons -->
+            <div class="flex justify-center space-x-4 p-6 bg-gray-50 border-t border-gray-200">
+                <a href="{% url 'cart' %}" class="bg-pizza-orange hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                    <i class="fas fa-shopping-cart mr-2"></i> Go to Cart
+                </a>
+                <a href="{% url 'menu' %}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-6 rounded-full transition duration-300">
+                    <i class="fas fa-pizza-slice mr-2"></i> Order More
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

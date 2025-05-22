@@ -1,0 +1,70 @@
+{% extends 'pizza_app/base.html' %}
+
+{% block title %}Menu - Pizza Paradise{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="bg-pizza-red py-12 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl font-bold mb-2">Our Menu</h1>
+        <p class="text-xl">Delicious pizzas made with fresh ingredients</p>
+    </div>
+</section>
+
+<!-- Menu Section -->
+<section class="py-16">
+    <div class="container mx-auto px-4">
+        <!-- Pizzas Section -->
+        <h2 class="text-3xl font-bold mb-8">Pizzas</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {% for pizza in pizzas %}
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <img src="{{ pizza.image_url }}" alt="{{ pizza.name }}" class="w-full h-64 object-cover">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">{{ pizza.name }}</h3>
+                    <p class="text-gray-600 mb-4">{{ pizza.description }}</p>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-pizza-red font-bold text-xl">${{ pizza.base_price }}</span>
+                        <a href="{% url 'pizza_detail' pizza.id %}" class="bg-pizza-red hover:bg-red-700 text-white font-medium py-2 px-4 rounded-full transition duration-300">
+                            Customize & Order
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full bg-yellow-100 p-4 rounded-md text-yellow-800">
+                No pizzas available at the moment. Please check back later.
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Drinks Section -->
+        <h2 class="text-3xl font-bold mb-8">Drinks</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for drink in drinks %}
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <img src="{{ drink.image_url }}" alt="{{ drink.name }}" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-lg font-bold mb-1">{{ drink.name }} - {{ drink.size }}</h3>
+                    {% if drink.description %}
+                    <p class="text-gray-600 text-sm mb-3">{{ drink.description }}</p>
+                    {% endif %}
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-pizza-red font-bold">${{ drink.price }}</span>
+                        <a href="{% url 'add_drink_to_cart' drink.id %}" class="bg-pizza-red hover:bg-red-700 text-white font-medium py-1 px-3 rounded-full text-sm transition duration-300">
+                            Add to Cart
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full bg-yellow-100 p-4 rounded-md text-yellow-800">
+                No drinks available at the moment. Please check back later.
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %} 

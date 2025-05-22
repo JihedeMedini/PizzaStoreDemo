@@ -1,0 +1,81 @@
+{% extends 'pizza_app/base.html' %}
+
+{% block title %}My Orders - Pizza Paradise{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-5xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8">My Orders</h1>
+        
+        {% if orders %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <!-- Table Header -->
+                <div class="bg-gray-50 p-4 border-b border-gray-200 hidden md:flex">
+                    <div class="w-1/6 font-medium">Order #</div>
+                    <div class="w-2/6 font-medium">Date</div>
+                    <div class="w-1/6 font-medium">Status</div>
+                    <div class="w-1/6 font-medium">Total</div>
+                    <div class="w-1/6 font-medium text-right">Action</div>
+                </div>
+                
+                <!-- Table Content -->
+                <div class="divide-y divide-gray-200">
+                    {% for order in orders %}
+                    <div class="flex flex-wrap md:flex-nowrap hover:bg-gray-50 p-4">
+                        <div class="w-1/2 md:w-1/6 mb-2 md:mb-0">
+                            <span class="md:hidden font-medium text-gray-500">Order:</span>
+                            <span class="font-medium md:font-normal">#{{ order.id }}</span>
+                        </div>
+                        
+                        <div class="w-1/2 md:w-2/6 mb-2 md:mb-0">
+                            <span class="md:hidden font-medium text-gray-500">Date:</span>
+                            {{ order.date_ordered|date:"M d, Y, g:i a" }}
+                        </div>
+                        
+                        <div class="w-1/2 md:w-1/6 mb-2 md:mb-0">
+                            <span class="md:hidden font-medium text-gray-500">Status:</span>
+                            {% if order.status == 'delivered' %}
+                                <span class="inline-block py-1 px-2 rounded-full text-xs bg-green-100 text-green-800 font-medium">
+                                    {{ order.get_status_display }}
+                                </span>
+                            {% elif order.status == 'cancelled' %}
+                                <span class="inline-block py-1 px-2 rounded-full text-xs bg-red-100 text-red-800 font-medium">
+                                    {{ order.get_status_display }}
+                                </span>
+                            {% else %}
+                                <span class="inline-block py-1 px-2 rounded-full text-xs bg-yellow-100 text-yellow-800 font-medium">
+                                    {{ order.get_status_display }}
+                                </span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="w-1/2 md:w-1/6 mb-2 md:mb-0">
+                            <span class="md:hidden font-medium text-gray-500">Total:</span>
+                            <span class="text-pizza-red font-medium">${{ order.total_price|floatformat:2 }}</span>
+                        </div>
+                        
+                        <div class="w-full md:w-1/6 md:text-right">
+                            <a href="{% url 'order_detail' order.id %}" 
+                               class="inline-block bg-pizza-red hover:bg-red-700 text-white py-1 px-3 rounded-full text-sm transition duration-200">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="bg-white rounded-lg shadow-md p-12 text-center">
+                <div class="mb-4 text-gray-400">
+                    <i class="fas fa-clipboard-list text-5xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-3">No Orders Yet</h2>
+                <p class="text-gray-600 mb-6">You haven't placed any orders yet.</p>
+                <a href="{% url 'menu' %}" class="bg-pizza-red hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                    Order Now
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

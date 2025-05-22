@@ -1,0 +1,98 @@
+{% extends 'pizza_app/base.html' %}
+
+{% block title %}Add {{ drink.name }} - Pizza Paradise{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="md:flex">
+                <!-- Drink Image -->
+                <div class="md:w-1/2 h-60 md:h-auto">
+                    <img class="w-full h-full object-cover" src="{{ drink.image_url }}" alt="{{ drink.name }}">
+                </div>
+                
+                <!-- Drink Details -->
+                <div class="md:w-1/2 p-8">
+                    <h1 class="text-3xl font-bold mb-2">{{ drink.name }}</h1>
+                    <p class="text-gray-600 mb-4">{{ drink.size }}</p>
+                    
+                    {% if drink.description %}
+                    <p class="text-gray-700 mb-6">{{ drink.description }}</p>
+                    {% endif %}
+                    
+                    <div class="text-2xl font-bold text-pizza-red mb-6">${{ drink.price|floatformat:2 }}</div>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="drink" value="{{ drink.id }}">
+                        
+                        <div class="flex items-center gap-2 mb-6">
+                            <span class="text-sm">Quantity:</span>
+                            <div class="flex items-center">
+                                <button type="button" class="quantity-btn bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded-l-md" data-action="decrease">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" name="quantity" value="1" min="1" max="10" class="w-12 text-center border-t border-b border-gray-300 py-1 focus:outline-none">
+                                <button type="button" class="quantity-btn bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded-r-md" data-action="increase">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button type="submit" class="bg-pizza-red hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 flex items-center">
+                                <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+                            </button>
+                            <a href="{% url 'menu' %}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-6 rounded-full transition duration-300">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const quantityInput = document.getElementById('id_quantity');
+        const decreaseBtn = document.getElementById('decrease-quantity');
+        const increaseBtn = document.getElementById('increase-quantity');
+        const totalPriceDisplay = document.getElementById('total-price');
+        const unitPrice = {{ drink.price }};
+        
+        // Update total price based on quantity
+        function updateTotalPrice() {
+            const quantity = parseInt(quantityInput.value);
+            const total = unitPrice * quantity;
+            totalPriceDisplay.textContent = '$' + total.toFixed(2);
+        }
+        
+        // Event listeners
+        decreaseBtn.addEventListener('click', function() {
+            let currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+                updateTotalPrice();
+            }
+        });
+        
+        increaseBtn.addEventListener('click', function() {
+            let currentValue = parseInt(quantityInput.value);
+            quantityInput.value = currentValue + 1;
+            updateTotalPrice();
+        });
+        
+        quantityInput.addEventListener('change', function() {
+            if (parseInt(this.value) < 1) {
+                this.value = 1;
+            }
+            updateTotalPrice();
+        });
+    });
+</script>
+{% endblock %} 

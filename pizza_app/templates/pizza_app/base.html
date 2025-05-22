@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Pizza Paradise{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pizza: {
+                            red: '#D62828',
+                            orange: '#F77F00',
+                            yellow: '#FCBF49',
+                            cream: '#EAE2B7'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .size-active {
+            background-color: #FCBF49;
+            border-color: #F77F00;
+            color: #333;
+            font-weight: 500;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-pizza-cream min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-pizza-slice text-pizza-red text-2xl mr-2"></i>
+                <span class="font-bold text-xl text-pizza-red">Pizza Paradise</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="{% url 'home' %}" class="text-gray-800 hover:text-pizza-red font-medium">Home</a>
+                <a href="{% url 'menu' %}" class="text-gray-800 hover:text-pizza-red font-medium">Menu</a>
+                <a href="{% url 'about' %}" class="text-gray-800 hover:text-pizza-red font-medium">About</a>
+                <a href="{% url 'contact' %}" class="text-gray-800 hover:text-pizza-red font-medium">Contact</a>
+            </div>
+            <div class="flex items-center">
+                {% if user.is_authenticated %}
+                <a href="{% url 'cart' %}" class="flex items-center text-gray-800 hover:text-pizza-red ml-6">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span id="cart-count" class="ml-1 bg-pizza-red text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                        {% if cart_count %}{{ cart_count }}{% else %}0{% endif %}
+                    </span>
+                </a>
+                <div class="ml-6 relative group">
+                    <button class="text-gray-800 hover:text-pizza-red font-medium flex items-center">
+                        {{ user.username }}
+                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                    </button>
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-10">
+                        <a href="{% url 'order_history' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Orders</a>
+                        <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+                    </div>
+                </div>
+                {% else %}
+                <a href="{% url 'login' %}" class="text-gray-800 hover:text-pizza-red font-medium ml-6">Login</a>
+                <a href="{% url 'register' %}" class="text-gray-800 hover:text-pizza-red font-medium ml-6">Register</a>
+                {% endif %}
+            </div>
+            <div class="md:hidden">
+                <button class="text-gray-600 focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+        <div class="container mx-auto px-4 mt-4">
+            {% for message in messages %}
+                <div class="bg-{{ message.tags }} text-white p-4 rounded-md mb-2 flex justify-between items-center">
+                    <span>{{ message }}</span>
+                    <button type="button" class="text-white" onclick="this.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-auto">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-pizza-slice text-pizza-red text-2xl mr-2"></i>
+                        <span class="font-bold text-xl">Pizza Paradise</span>
+                    </div>
+                    <p class="text-gray-400 max-w-xs">Serving delicious Norwegian-inspired pizzas since 2010. Quality ingredients from the fjords and mountains of Norway.</p>
+                </div>
+                <div class="mb-6 md:mb-0">
+                    <h3 class="font-semibold text-lg mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'home' %}" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="{% url 'menu' %}" class="text-gray-400 hover:text-white">Menu</a></li>
+                        <li><a href="{% url 'about' %}" class="text-gray-400 hover:text-white">About</a></li>
+                        <li><a href="{% url 'contact' %}" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-lg mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>&copy; {% now "Y" %} Pizza Paradise. All rights reserved. <span class="text-xs ml-2">Velkommen til smakens verden!</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Include FontAwesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    
+    <!-- Include cart functionality -->
+    {% load static %}
+    <script src="{% static 'pizza_app/js/cart.js' %}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

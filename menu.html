@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Pizza Paradise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pizza: {
+                            red: '#D62828',
+                            orange: '#F77F00',
+                            yellow: '#FCBF49',
+                            cream: '#EAE2B7'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-pizza-cream min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-pizza-slice text-pizza-red text-2xl mr-2"></i>
+                <span class="font-bold text-xl text-pizza-red">Pizza Paradise</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="index.html" class="text-gray-800 hover:text-pizza-red font-medium">Home</a>
+                <a href="menu.html" class="text-gray-800 hover:text-pizza-red font-medium">Menu</a>
+                <a href="#" class="text-gray-800 hover:text-pizza-red font-medium">About</a>
+                <a href="#" class="text-gray-800 hover:text-pizza-red font-medium">Contact</a>
+            </div>
+            <div class="flex items-center">
+                <button id="cart-button" class="flex items-center text-gray-800 hover:text-pizza-red ml-6">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span id="cart-count" class="ml-1 bg-pizza-red text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">0</span>
+                </button>
+            </div>
+            <div class="md:hidden">
+                <button class="text-gray-600 focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="bg-pizza-red py-12 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-2">Our Menu</h1>
+            <p class="text-xl">Delicious pizzas made with fresh ingredients</p>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Margherita Pizza -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80" alt="Margherita Pizza" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Margherita</h3>
+                        <p class="text-gray-600 mb-4">Classic pizza with tomato sauce, fresh mozzarella, basil, and extra virgin olive oil.</p>
+                        
+                        <div class="mb-4">
+                            <p class="font-medium mb-2">Size:</p>
+                            <div class="flex space-x-4" data-pizza-id="1">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="size-1" value="small" class="pizza-size hidden" data-price="9.99" checked>
+                                    <span class="size-label px-3 py-1 rounded-full border border-gray-300 text-sm hover:bg-gray-100 size-active">Small</span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="size-1" value="medium" class="pizza-size hidden" data-price="12.99">
+                                    <span class="size-label px-3 py-1 rounded-full border border-gray-300 text-sm hover:bg-gray-100">Medium</span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="size-1" value="large" class="pizza-size hidden" data-price="15.99">
+                                    <span class="size-label px-3 py-1 rounded-full border border-gray-300 text-sm hover:bg-gray-100">Large</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <span class="text-pizza-red font-bold text-xl">$<span class="pizza-price">9.99</span></span>
+                            <button class="add-to-cart bg-pizza-red hover:bg-red-700 text-white font-medium py-2 px-4 rounded-full transition duration-300"
+                                    data-id="1" 
+                                    data-name="Margherita" 
+                                    data-image="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pepperoni Pizza -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1780&q=80" alt="Pepperoni Pizza" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Pepperoni</h3>
+                        <p class="text-gray-600 mb-4">Classic American pizza topped with tomato sauce, mozzarella, and pepperoni slices.</p>
+                        
+                        <div class="mb-4">
+                            <p class="font-medium mb-2">Size:</p>
+                            <div class="flex space-x-4" data-pizza-id="2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="size-2" value="small" class="pizza-size hidden" data-price="10.99" checked>
+                                    <span class="size-label px-3 py-1 rounded-full border border-gray-300 text-sm hover:bg-gray-100 size-active">Small</span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="size-2" value="medium" class="pizza-size hidden" data-price="13.99">
+                                    <span class="size-label px-3 py-1 rounded-full border border-gray-300 text-sm hover:bg-gray-100">Medium</span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="size-2" value="large" class="pizza-size hidden" data-price="16.99">
+                                    <span class="size-label px-3 py-1 rounded-full border border-gray-300 text-sm hover:bg-gray-100">Large</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <span class="text-pizza-red font-bold text-xl">$<span class="pizza-price">10.99</span></span>
+                            <button class="add-to-cart bg-pizza-red hover:bg-red-700 text-white font-medium py-2 px-4 rounded-full transition duration-300"
+                                    data-id="2" 
+                                    data-name="Pepperoni" 
+                                    data-image="https://images.unsplash.com/photo-1628840042765-356cda07504e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1780&q=80">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vegetarian Pizza -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1604917877934-07d8d248d396?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80" alt="Vegetarian Pizza" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Vegetarian</h3>
+                        <p class="text-gray-600 mb-4">Fresh vegetables including bell peppers, mushrooms, onions, olives, and tomatoes.</p>
+                        
+                        <div class="mb-4">
+                            <p class="font-medium mb-2">Size:</p>
+                            <div class="flex space-x-4" data-pizza-id="3">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="size-3" value="small" class="pizza-size hidden" data-price="11.99" checked>
+                                    <span class="size-label px-3 py-1 rounded-full border border-gray-300 text-sm hover:bg-gray-100 size-active">Small</span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="size-3" value="medium" class="pizza-size hidden" data-price="14.99">
+                                    <span class="size-label px-3 py-1 rounded-full border border-gray-300 text-sm hover:bg-gray-100">Medium</span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="size-3" value="large" class="pizza-size hidden" data-price="17.99">
+                                    <span class="size-label px-3 py-1 rounded-full border border-gray-300 text-sm hover:bg-gray-100">Large</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <span class="text-pizza-red font-bold text-xl">$<span class="pizza-price">11.99</span></span>
+                            <button class="add-to-cart bg-pizza-red hover:bg-red-700 text-white font-medium py-2 px-4 rounded-full transition duration-300"
+                                    data-id="3" 
+                                    data-name="Vegetarian" 
+                                    data-image="https://images.unsplash.com/photo-1604917877934-07d8d248d396?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Supreme Pizza -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1590947132387-155cc02f3212?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Supreme Pizza" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Supreme</h3>
+                        <p class="text-gray-600 mb-4">Loaded with pepperoni, sausage, bell peppers, onions, olives, and mushrooms.</p>
+                        
+                        <div class="mb-4">
+                            <p class="font-medium mb-2">Size:</p>
+                            <div class="flex space-x-4" data-pizza-id="4">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="size-4" value="small" class="pizza-size hidden" data-price="12.99" checked>
+                                    <span class="size-label px-3 py-1 rounded-full border border-gray-300 text-sm hover:bg-gray-100 size-active">Small</span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="size-4" value="medium" class="pizza-size hidden" data-price="15.99">
+                                    <span class="size-label px-3 py-1 rounded-full border border-gray-300 text-sm hover:bg-gray-100">Medium</span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="size-4" value="large" class="pizza-size hidden" data-price="18.99">
+                                    <span class="size-label px-3 py-1 rounded-full border border-gray-300 text-sm hover:bg-gray-100">Large</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <span class="text-pizza-red font-bold text-xl">$<span class="pizza-price">12.99</span></span>
+                            <button class="add-to-cart bg-pizza-red hover:bg-red-700 text-white font-medium py-2 px-4 rounded-full transition duration-300"
+                                    data-id="4" 
+                                    data-name="Supreme" 
+                                    data-image="https://images.unsplash.com/photo-1590947132387-155cc02f3212?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-50">
+        <div class="p-6 h-full flex flex-col">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">Your Cart</h2>
+                <button id="close-cart" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div id="cart-items" class="flex-grow overflow-y-auto">
+                <!-- Cart items will be dynamically added here -->
+                <div id="empty-cart-message" class="text-gray-500 text-center py-8">
+                    Your cart is empty
+                </div>
+            </div>
+            
+            <div class="border-t pt-4 mt-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-medium">Total:</span>
+                    <span class="text-pizza-red font-bold text-xl">$<span id="cart-total">0.00</span></span>
+                </div>
+                <button id="checkout-btn" class="w-full bg-pizza-red hover:bg-red-700 text-white font-bold py-3 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    Checkout
+                </button>
+                <button id="clear-cart" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 rounded-lg mt-2 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    Clear Cart
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Overlay -->
+    <div id="overlay" class="fixed inset-0 bg-black opacity-50 hidden z-40"></div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-auto">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-pizza-slice text-pizza-red text-2xl mr-2"></i>
+                        <span class="font-bold text-xl">Pizza Paradise</span>
+                    </div>
+                    <p class="text-gray-400 max-w-xs">Serving delicious pizzas since 2010. Quality ingredients, authentic recipes.</p>
+                </div>
+                <div class="mb-6 md:mb-0">
+                    <h3 class="font-semibold text-lg mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="menu.html" class="text-gray-400 hover:text-white">Menu</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">About</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-lg mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>&copy; 2023 Pizza Paradise. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 

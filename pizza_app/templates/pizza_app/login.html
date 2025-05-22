@@ -1,0 +1,50 @@
+{% extends 'pizza_app/base.html' %}
+
+{% block title %}Login - Pizza Paradise{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4">Log In</h2>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Username</label>
+                            <input type="text" name="username" id="id_username" class="form-control" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_password" class="form-label">Password</label>
+                            <input type="password" name="password" id="id_password" class="form-control" required>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary py-2">Log In</button>
+                        </div>
+                        
+                        {% if form.errors %}
+                            <div class="alert alert-danger mt-3">
+                                <p class="mb-0">Your username and password didn't match. Please try again.</p>
+                            </div>
+                        {% endif %}
+                    </form>
+                    
+                    <div class="mt-4 text-center">
+                        <p class="mb-0">
+                            Don't have an account? 
+                            <a href="{% url 'register' %}" class="text-decoration-none" style="color: var(--pizza-red);">
+                                Register here
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

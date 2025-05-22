@@ -1,0 +1,119 @@
+{% extends 'pizza_app/base.html' %}
+
+{% block title %}Order #{{ order.id }} - Pizza Paradise{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-3xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold">Order Details</h1>
+            <a href="{% url 'order_history' %}" class="text-pizza-red hover:text-red-700 flex items-center">
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Back to Orders
+            </a>
+        </div>
+        
+        <!-- Order Details Card -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <!-- Card Header -->
+            <div class="bg-pizza-red text-white p-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-bold">Order #{{ order.id }}</h2>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
+                        {% if order.status == 'delivered' %}bg-green-100 text-green-800
+                        {% elif order.status == 'cancelled' %}bg-red-100 text-red-800
+                        {% else %}bg-white text-pizza-red{% endif %}">
+                        {{ order.get_status_display }}
+                    </span>
+                </div>
+            </div>
+            
+            <!-- Order Information -->
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 border-b border-gray-200">
+                <div>
+                    <div class="mb-4">
+                        <span class="block text-sm text-gray-500">Order Date</span>
+                        <span class="block font-medium">{{ order.date_ordered|date:"F d, Y, g:i a" }}</span>
+                    </div>
+                    <div>
+                        <span class="block text-sm text-gray-500">Customer</span>
+                        <span class="block font-medium">{{ order.user.first_name }} {{ order.user.last_name }}</span>
+                    </div>
+                </div>
+                <div>
+                    {% if order.delivery_address %}
+                    <div>
+                        <span class="block text-sm text-gray-500">Delivery Address</span>
+                        <span class="block font-medium">{{ order.delivery_address }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Order Items -->
+            <div class="p-6">
+                <h3 class="font-bold text-lg mb-4">Order Items</h3>
+                
+                <div class="divide-y divide-gray-200">
+                    {% for item in order.orderitem_set.all %}
+                    <div class="py-4">
+                        <div class="flex justify-between mb-2">
+                            <div class="flex items-start">
+                                <span class="inline-flex justify-center items-center w-6 h-6 rounded-full bg-gray-100 text-gray-600 mr-3">
+                                    {{ item.quantity }}
+                                </span>
+                                <div>
+                                    {% if item.pizza %}
+                                    <span class="font-medium block">{{ item.pizza.name }}</span>
+                                    <span class="text-sm text-gray-600 block">{{ item.pizza_size.name }}</span>
+                                    
+                                    {% if item.toppings.all %}
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        <span>Toppings:</span>
+                                        {% for topping in item.toppings.all %}
+                                            {{ topping.topping.name }}{% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% elif item.drink %}
+                                    <span class="font-medium block">{{ item.drink.name }}</span>
+                                    <span class="text-sm text-gray-600 block">{{ item.drink.size }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <span class="text-pizza-red font-medium">${{ item.item_price|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    <!-- Total -->
+                    <div class="py-4">
+                        <div class="flex justify-between">
+                            <span class="font-bold">Total</span>
+                            <span class="text-pizza-red font-bold">${{ order.total_price|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="p-6 bg-gray-50 flex flex-wrap gap-3 justify-center sm:justify-end border-t border-gray-200">
+                <a href="{% url 'menu' %}" class="bg-pizza-red hover:bg-red-700 text-white font-medium py-2 px-6 rounded-full transition duration-200">
+                    Order Again
+                </a>
+                {% if order.status == 'pending' %}
+                <form action="{% url 'cancel_order' order.id %}" method="post" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-white hover:bg-gray-100 text-gray-800 font-medium py-2 px-6 rounded-full border border-gray-300 transition duration-200">
+                        Cancel Order
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
