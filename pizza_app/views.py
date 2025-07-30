@@ -49,7 +49,6 @@ def menu(request):
     }
     return render(request, 'pizza_app/menu.html', context)
 
-@login_required
 def pizza_detail(request, pizza_id):
     """Show pizza details and allow customization."""
     pizza = get_pizza_by_id(pizza_id)
@@ -104,7 +103,6 @@ def pizza_detail(request, pizza_id):
     
     return render(request, 'pizza_app/pizza_detail.html', context)
 
-@login_required
 def suggest_drinks(request, pizza_id):
     """Suggest drinks after adding a pizza to cart."""
     pizza = get_pizza_by_id(pizza_id)
@@ -122,7 +120,6 @@ def suggest_drinks(request, pizza_id):
     
     return render(request, 'pizza_app/add_drink_suggestion.html', context)
 
-@login_required
 def add_drink_to_cart(request, drink_id):
     """Add a drink to the user's cart."""
     drink = get_drink_by_id(drink_id)
@@ -160,7 +157,6 @@ def add_drink_to_cart(request, drink_id):
     
     return render(request, 'pizza_app/add_drink.html', context)
 
-@login_required
 def cart(request):
     """Display the user's shopping cart."""
     cart_items = request.session.get('cart', [])
@@ -173,7 +169,6 @@ def cart(request):
     
     return render(request, 'pizza_app/cart.html', context)
 
-@login_required
 def remove_from_cart(request, item_id):
     """Remove an item from the cart."""
     cart_items = request.session.get('cart', [])
@@ -190,7 +185,6 @@ def remove_from_cart(request, item_id):
     
     return redirect('cart')
 
-@login_required
 def update_cart_item(request, item_id):
     """Update the quantity of a cart item."""
     if request.method == 'POST':
@@ -214,7 +208,6 @@ def update_cart_item(request, item_id):
     
     return redirect('cart')
 
-@login_required
 def checkout(request):
     """Process the checkout and create an order."""
     cart_items = request.session.get('cart', [])
@@ -236,7 +229,7 @@ def checkout(request):
         'items': cart_items.copy(),
         'total': total,
         'status': 'confirmed',
-        'user': request.user.username,
+        'user': 'Guest User' if not request.user.is_authenticated else request.user.username,
         'timestamp': time.time()
     }
     
@@ -250,7 +243,6 @@ def checkout(request):
     messages.success(request, "Your order has been placed successfully!")
     return redirect('order_confirmation')
 
-@login_required
 def order_confirmation(request):
     """Display order confirmation."""
     order = request.session.get('last_order')
@@ -265,7 +257,6 @@ def order_confirmation(request):
     
     return render(request, 'pizza_app/order_confirmation.html', context)
 
-@login_required
 def order_history(request):
     """Display the user's order history."""
     # For demo purposes, show only the last order if it exists
@@ -278,7 +269,6 @@ def order_history(request):
     
     return render(request, 'pizza_app/order_history.html', context)
 
-@login_required
 def order_detail(request, order_id):
     """Display details of a specific order."""
     last_order = request.session.get('last_order')
@@ -293,7 +283,6 @@ def order_detail(request, order_id):
     
     return render(request, 'pizza_app/order_detail.html', context)
 
-@login_required
 def cancel_order(request, order_id):
     """Cancel a pending order."""
     last_order = request.session.get('last_order')

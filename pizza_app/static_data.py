@@ -59,16 +59,16 @@ PIZZAS = {
 
 # Drink data
 DRINKS = [
-    {'id': 1, 'name': 'Coca-Cola', 'size': 'Small', 'price': 1.99, 'description': 'Classic carbonated soft drink', 'image_url': 'https://images.unsplash.com/photo-1581006852262-e4307cf6283a?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'},
-    {'id': 2, 'name': 'Coca-Cola', 'size': 'Medium', 'price': 2.49, 'description': 'Classic carbonated soft drink', 'image_url': 'https://images.unsplash.com/photo-1581006852262-e4307cf6283a?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'},
-    {'id': 3, 'name': 'Coca-Cola', 'size': 'Large', 'price': 2.99, 'description': 'Classic carbonated soft drink', 'image_url': 'https://images.unsplash.com/photo-1581006852262-e4307cf6283a?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'},
-    {'id': 4, 'name': 'Sprite', 'size': 'Small', 'price': 1.99, 'description': 'Lemon-lime flavored soda', 'image_url': 'https://images.unsplash.com/photo-1625772452859-1c03d5bf1137?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'},
-    {'id': 5, 'name': 'Sprite', 'size': 'Medium', 'price': 2.49, 'description': 'Lemon-lime flavored soda', 'image_url': 'https://images.unsplash.com/photo-1625772452859-1c03d5bf1137?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'},
-    {'id': 6, 'name': 'Sprite', 'size': 'Large', 'price': 2.99, 'description': 'Lemon-lime flavored soda', 'image_url': 'https://images.unsplash.com/photo-1625772452859-1c03d5bf1137?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'},
-    {'id': 7, 'name': 'Fanta', 'size': 'Small', 'price': 1.99, 'description': 'Orange flavored soda', 'image_url': 'https://images.unsplash.com/photo-1606107557979-9e88b8f6e4e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'},
-    {'id': 8, 'name': 'Fanta', 'size': 'Medium', 'price': 2.49, 'description': 'Orange flavored soda', 'image_url': 'https://images.unsplash.com/photo-1606107557979-9e88b8f6e4e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'},
-    {'id': 9, 'name': 'Fanta', 'size': 'Large', 'price': 2.99, 'description': 'Orange flavored soda', 'image_url': 'https://images.unsplash.com/photo-1606107557979-9e88b8f6e4e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'},
-    {'id': 10, 'name': 'Water', 'size': 'Bottle', 'price': 1.49, 'description': 'Pure spring water', 'image_url': 'https://images.unsplash.com/photo-1615114814213-a245ffc79e9a?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'},
+    {'id': 1, 'name': 'Coca-Cola', 'size': 'Small', 'price': 1.99, 'description': 'Classic carbonated soft drink', 'image_url': 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'},
+    {'id': 2, 'name': 'Coca-Cola', 'size': 'Medium', 'price': 2.49, 'description': 'Classic carbonated soft drink', 'image_url': 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'},
+    {'id': 3, 'name': 'Coca-Cola', 'size': 'Large', 'price': 2.99, 'description': 'Classic carbonated soft drink', 'image_url': 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'},
+    {'id': 4, 'name': 'Sprite', 'size': 'Small', 'price': 1.99, 'description': 'Lemon-lime flavored soda', 'image_url': 'https://images.unsplash.com/photo-1544145945-f90425340c7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'},
+    {'id': 5, 'name': 'Sprite', 'size': 'Medium', 'price': 2.49, 'description': 'Lemon-lime flavored soda', 'image_url': 'https://images.unsplash.com/photo-1544145945-f90425340c7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'},
+    {'id': 6, 'name': 'Sprite', 'size': 'Large', 'price': 2.99, 'description': 'Lemon-lime flavored soda', 'image_url': 'https://images.unsplash.com/photo-1544145945-f90425340c7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'},
+    {'id': 7, 'name': 'Fanta', 'size': 'Small', 'price': 1.99, 'description': 'Orange flavored soda', 'image_url': 'https://images.unsplash.com/photo-1624552184280-8a8585739fea?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'},
+    {'id': 8, 'name': 'Fanta', 'size': 'Medium', 'price': 2.49, 'description': 'Orange flavored soda', 'image_url': 'https://images.unsplash.com/photo-1624552184280-8a8585739fea?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'},
+    {'id': 9, 'name': 'Fanta', 'size': 'Large', 'price': 2.99, 'description': 'Orange flavored soda', 'image_url': 'https://images.unsplash.com/photo-1624552184280-8a8585739fea?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'},
+    {'id': 10, 'name': 'Water', 'size': 'Bottle', 'price': 1.49, 'description': 'Pure spring water', 'image_url': 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'},
 ]
 
 # Helper functions to mimic model behavior
