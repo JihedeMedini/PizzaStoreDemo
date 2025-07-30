@@ -79,11 +79,11 @@ WSGI_APPLICATION = "pizza_paradise.wsgi.application"
 IS_VERCEL = os.environ.get('VERCEL')
 
 if IS_VERCEL:
-    # Use dummy DB for Vercel - read only
+    # Use persistent SQLite database for Vercel
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': ':memory:',  # Use in-memory SQLite database
+            'NAME': BASE_DIR / "db.sqlite3",  # Use persistent file instead of memory
         }
     }
 else:
