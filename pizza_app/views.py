@@ -3,11 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib import messages
 from django.db.models import Sum
+from django.http import JsonResponse
 import os
-from .models import (
-    Pizza, Size, Topping, Drink, 
-    Order, OrderItem, OrderItemTopping,
-    Cart, CartItem, CartItemTopping
+import json
+from .static_data import (
+    get_all_pizzas, get_all_drinks, get_pizza_by_id, get_drink_by_id,
+    calculate_pizza_price, get_available_toppings_for_pizza,
+    SIZES, TOPPINGS
 )
 from .forms import UserRegistrationForm, PizzaSelectionForm, ToppingSelectionForm, DrinkSelectionForm
 
@@ -37,159 +39,67 @@ def register(request):
     return render(request, 'pizza_app/register.html', {'form': form})
 
 def menu(request):
-    """Display the menu with pizzas and drinks."""
-    # Check if running on Vercel with in-memory database
-    IS_VERCEL = os.environ.get('VERCEL')
+    """Display the menu with pizzas and drinks using static data."""
+    pizzas = get_all_pizzas()
+    drinks = get_all_drinks()
     
-    if IS_VERCEL:
-        # For demo purpose on Vercel, create sample data in memory
-        try:
-            # Check if we already have sample data
-            if not Pizza.objects.exists():
-                # Create sizes
-                small = Size.objects.create(name='Small', price_factor=0.8)
-                medium = Size.objects.create(name='Medium', price_factor=1.0)
-                large = Size.objects.create(name='Large', price_factor=1.2)
-                
-                # Create toppings
-                pepperoni = Topping.objects.create(name='Pepperoni', price=1.5, available=True)
-                mushrooms = Topping.objects.create(name='Mushrooms', price=1.0, available=True)
-                onions = Topping.objects.create(name='Onions', price=0.75, available=True)
-                olives = Topping.objects.create(name='Olives', price=1.0, available=True)
-                
-                # Create pizzas
-                margherita = Pizza.objects.create(
-                    name='Margherita',
-                    description='Classic pizza with tomato sauce and mozzarella cheese',
-                    base_price=10.0,
-                    image_url='https://images.unsplash.com/photo-1604382354936-07c5d9983bd3',
-                    available=True
-                )
-                margherita.available_toppings.add(pepperoni, mushrooms, onions, olives)
-                
-                pepperoni_pizza = Pizza.objects.create(
-                    name='Pepperoni',
-                    description='Pizza with tomato sauce, mozzarella cheese and pepperoni',
-                    base_price=12.0,
-                    image_url='https://images.unsplash.com/photo-1628840042765-356cda07504e',
-                    available=True
-                )
-                pepperoni_pizza.available_toppings.add(mushrooms, onions, olives)
-                
-                veggie = Pizza.objects.create(
-                    name='Vegetarian',
-                    description='Pizza with tomato sauce, mozzarella cheese, mushrooms, onions, and olives',
-                    base_price=11.0,
-                    image_url='https://images.unsplash.com/photo-1511689660979-10d2b1aada49',
-                    available=True
-                )
-                veggie.available_toppings.add(mushrooms, onions, olives)
-                
-                # Create drinks
-                water = Drink.objects.create(
-                    name='Water',
-                    description='Bottled water',
-                    price=1.5,
-                    image_url='https://images.unsplash.com/photo-1615114814213-a245ffc79e9a',
-                    available=True
-                )
-                
-                soda = Drink.objects.create(
-                    name='Soda',
-                    description='Carbonated soft drink',
-                    price=2.0,
-                    image_url='https://images.unsplash.com/photo-1581006852262-e4307cf6283a',
-                    available=True
-                )
-                
-                juice = Drink.objects.create(
-                    name='Orange Juice',
-                    description='Freshly squeezed orange juice',
-                    price=2.5,
-                    image_url='https://images.unsplash.com/photo-1600271886742-f049cd451bba',
-                    available=True
-                )
-        except Exception as e:
-            # In case of any database errors, log them
-            print(f"Error creating sample data: {e}")
-    
-    # Now retrieve the data
-    try:
-        pizzas = Pizza.objects.filter(available=True)
-        drinks = Drink.objects.filter(available=True)
-        sizes = Size.objects.all()
-        
-        context = {
-            'pizzas': pizzas,
-            'drinks': drinks,
-            'sizes': sizes,
-        }
-    except Exception as e:
-        # Fallback in case of any database errors
-        context = {
-            'error': 'Unable to load menu data',
-            'error_details': str(e),
-            'pizzas': [],
-            'drinks': [],
-            'sizes': [],
-        }
-    
+    context = {
+        'pizzas': pizzas,
+        'drinks': drinks,
+    }
     return render(request, 'pizza_app/menu.html', context)
 
 @login_required
 def pizza_detail(request, pizza_id):
     """Show pizza details and allow customization."""
-    pizza = get_object_or_404(Pizza, id=pizza_id, available=True)
-    sizes = Size.objects.all()
+    pizza = get_pizza_by_id(pizza_id)
+    if not pizza:
+        messages.error(request, "Pizza not found.")
+        return redirect('menu')
     
     if request.method == 'POST':
-        pizza_form = PizzaSelectionForm(request.POST, initial={'pizza': pizza.id})
-        topping_form = ToppingSelectionForm(
-            request.POST, 
-            available_toppings=pizza.available_toppings.filter(available=True)
-        )
+        size = request.POST.get('size', 'Medium')
+        quantity = int(request.POST.get('quantity', 1))
+        selected_toppings = request.POST.getlist('toppings')
         
-        if pizza_form.is_valid() and topping_form.is_valid():
-            # Get or create user's cart
-            cart, created = Cart.objects.get_or_create(user=request.user)
-            
-            # Get form data
-            size = pizza_form.cleaned_data['size']
-            quantity = pizza_form.cleaned_data['quantity']
-            
-            # Create cart item
-            cart_item = CartItem.objects.create(
-                cart=cart,
-                item_type='pizza',
-                pizza=pizza,
-                pizza_size=size,
-                quantity=quantity
-            )
-            
-            # Add selected toppings
-            for field_name, value in topping_form.cleaned_data.items():
-                if value and field_name.startswith('topping_'):
-                    topping_id = int(field_name.split('_')[1])
-                    topping = Topping.objects.get(id=topping_id)
-                    CartItemTopping.objects.create(
-                        cart_item=cart_item,
-                        topping=topping
-                    )
-            
-            messages.success(request, f'Added {pizza.name} to your cart!')
-            # Redirect to drink suggestion page instead of cart
-            return redirect('suggest_drinks', pizza_id=pizza.id)
-    else:
-        pizza_form = PizzaSelectionForm(initial={'pizza': pizza.id})
-        topping_form = ToppingSelectionForm(
-            available_toppings=pizza.available_toppings.filter(available=True)
-        )
+        # Validate size
+        if size not in SIZES:
+            size = 'Medium'
+        
+        # Validate toppings against available toppings for this pizza
+        available_toppings = get_available_toppings_for_pizza(pizza_id)
+        valid_toppings = [t for t in selected_toppings if t in available_toppings]
+        
+        # Calculate price
+        price = calculate_pizza_price(pizza_id, size, valid_toppings)
+        
+        # Add to session cart
+        if 'cart' not in request.session:
+            request.session['cart'] = []
+        
+        cart_item = {
+            'id': f"pizza_{pizza_id}_{len(request.session['cart'])}",
+            'type': 'pizza',
+            'pizza_id': pizza_id,
+            'pizza_name': pizza['name'],
+            'size': size,
+            'toppings': valid_toppings,
+            'quantity': quantity,
+            'price': price,
+            'total_price': price * quantity
+        }
+        
+        request.session['cart'].append(cart_item)
+        request.session.modified = True
+        
+        messages.success(request, f'Added {pizza["name"]} to your cart!')
+        return redirect('suggest_drinks', pizza_id=pizza_id)
     
     context = {
         'pizza': pizza,
-        'sizes': sizes,
-        'pizza_form': pizza_form,
-        'topping_form': topping_form,
+        'sizes': SIZES,
+        'available_toppings': get_available_toppings_for_pizza(pizza_id),
+        'toppings_data': TOPPINGS,
     }
     
     return render(request, 'pizza_app/pizza_detail.html', context)
@@ -197,9 +107,13 @@ def pizza_detail(request, pizza_id):
 @login_required
 def suggest_drinks(request, pizza_id):
     """Suggest drinks after adding a pizza to cart."""
-    pizza = get_object_or_404(Pizza, id=pizza_id)
+    pizza = get_pizza_by_id(pizza_id)
+    if not pizza:
+        messages.error(request, "Pizza not found.")
+        return redirect('menu')
+    
     # Get available drinks
-    drinks = Drink.objects.filter(available=True)
+    drinks = get_all_drinks()
     
     context = {
         'pizza': pizza,
@@ -211,34 +125,37 @@ def suggest_drinks(request, pizza_id):
 @login_required
 def add_drink_to_cart(request, drink_id):
     """Add a drink to the user's cart."""
-    drink = get_object_or_404(Drink, id=drink_id, available=True)
+    drink = get_drink_by_id(drink_id)
+    if not drink:
+        messages.error(request, "Drink not found.")
+        return redirect('menu')
     
     if request.method == 'POST':
-        form = DrinkSelectionForm(request.POST, initial={'drink': drink.id})
+        quantity = int(request.POST.get('quantity', 1))
         
-        if form.is_valid():
-            # Get or create user's cart
-            cart, created = Cart.objects.get_or_create(user=request.user)
-            
-            # Get form data
-            quantity = form.cleaned_data['quantity']
-            
-            # Create cart item
-            CartItem.objects.create(
-                cart=cart,
-                item_type='drink',
-                drink=drink,
-                quantity=quantity
-            )
-            
-            messages.success(request, f'Added {drink.name} to your cart!')
-            return redirect('cart')
-    else:
-        form = DrinkSelectionForm(initial={'drink': drink.id})
+        # Add to session cart
+        if 'cart' not in request.session:
+            request.session['cart'] = []
+        
+        cart_item = {
+            'id': f"drink_{drink_id}_{len(request.session['cart'])}",
+            'type': 'drink',
+            'drink_id': drink_id,
+            'drink_name': drink['name'],
+            'drink_size': drink['size'],
+            'quantity': quantity,
+            'price': drink['price'],
+            'total_price': drink['price'] * quantity
+        }
+        
+        request.session['cart'].append(cart_item)
+        request.session.modified = True
+        
+        messages.success(request, f'Added {drink["name"]} to your cart!')
+        return redirect('cart')
     
     context = {
         'drink': drink,
-        'form': form,
     }
     
     return render(request, 'pizza_app/add_drink.html', context)
@@ -246,13 +163,8 @@ def add_drink_to_cart(request, drink_id):
 @login_required
 def cart(request):
     """Display the user's shopping cart."""
-    try:
-        cart = Cart.objects.get(user=request.user)
-        cart_items = cart.items.all()
-        total = cart.total_price
-    except Cart.DoesNotExist:
-        cart_items = []
-        total = 0
+    cart_items = request.session.get('cart', [])
+    total = sum(item['total_price'] for item in cart_items)
     
     context = {
         'cart_items': cart_items,
@@ -264,106 +176,91 @@ def cart(request):
 @login_required
 def remove_from_cart(request, item_id):
     """Remove an item from the cart."""
-    item = get_object_or_404(CartItem, id=item_id)
+    cart_items = request.session.get('cart', [])
     
-    # Ensure the item belongs to the user's cart
-    if item.cart.user != request.user:
-        messages.error(request, "You don't have permission to remove this item.")
-        return redirect('cart')
+    # Find and remove the item
+    updated_cart = [item for item in cart_items if item['id'] != item_id]
     
-    item.delete()
-    messages.success(request, "Item removed from cart.")
+    if len(updated_cart) < len(cart_items):
+        request.session['cart'] = updated_cart
+        request.session.modified = True
+        messages.success(request, "Item removed from cart.")
+    else:
+        messages.error(request, "Item not found in cart.")
+    
     return redirect('cart')
 
 @login_required
 def update_cart_item(request, item_id):
     """Update the quantity of a cart item."""
-    item = get_object_or_404(CartItem, id=item_id)
-    
-    # Ensure the item belongs to the user's cart
-    if item.cart.user != request.user:
-        messages.error(request, "You don't have permission to update this item.")
-        return redirect('cart')
-    
     if request.method == 'POST':
         new_quantity = int(request.POST.get('quantity', 1))
-        if new_quantity > 0:
-            item.quantity = new_quantity
-            item.save()
-            messages.success(request, "Cart updated.")
-        else:
-            item.delete()
-            messages.success(request, "Item removed from cart.")
+        cart_items = request.session.get('cart', [])
+        
+        for item in cart_items:
+            if item['id'] == item_id:
+                if new_quantity > 0:
+                    item['quantity'] = new_quantity
+                    item['total_price'] = item['price'] * new_quantity
+                    messages.success(request, "Cart updated.")
+                else:
+                    # Remove item if quantity is 0
+                    cart_items = [i for i in cart_items if i['id'] != item_id]
+                    messages.success(request, "Item removed from cart.")
+                break
+        
+        request.session['cart'] = cart_items
+        request.session.modified = True
     
     return redirect('cart')
 
 @login_required
 def checkout(request):
     """Process the checkout and create an order."""
-    try:
-        cart = Cart.objects.get(user=request.user)
-        cart_items = cart.items.all()
-        
-        if not cart_items:
-            messages.error(request, "Your cart is empty.")
-            return redirect('cart')
-        
-        # Calculate total
-        total = cart.total_price
-        
-        # Create order
-        order = Order.objects.create(
-            user=request.user,
-            total_price=total,
-            status='pending'
-        )
-        
-        # Add items to order
-        for cart_item in cart_items:
-            if cart_item.item_type == 'pizza':
-                order_item = OrderItem.objects.create(
-                    order=order,
-                    item_type='pizza',
-                    pizza=cart_item.pizza,
-                    pizza_size=cart_item.pizza_size,
-                    quantity=cart_item.quantity,
-                    item_price=cart_item.item_price
-                )
-                
-                # Add toppings to order item
-                for cart_topping in cart_item.toppings.all():
-                    OrderItemTopping.objects.create(
-                        order_item=order_item,
-                        topping=cart_topping.topping,
-                        topping_price=cart_topping.topping.get_price_for_size(cart_item.pizza_size)
-                    )
-            else:
-                OrderItem.objects.create(
-                    order=order,
-                    item_type='drink',
-                    drink=cart_item.drink,
-                    quantity=cart_item.quantity,
-                    item_price=cart_item.drink.price
-                )
-        
-        # Clear the cart
-        cart.items.all().delete()
-        
-        messages.success(request, "Your order has been placed successfully!")
-        return redirect('order_confirmation', order_id=order.id)
-        
-    except Cart.DoesNotExist:
+    cart_items = request.session.get('cart', [])
+    
+    if not cart_items:
         messages.error(request, "Your cart is empty.")
         return redirect('cart')
+    
+    # Calculate total
+    total = sum(item['total_price'] for item in cart_items)
+    
+    # Create a simple order ID using timestamp
+    import time
+    order_id = f"ORD{int(time.time())}"
+    
+    # Store order in session for confirmation
+    order_data = {
+        'id': order_id,
+        'items': cart_items.copy(),
+        'total': total,
+        'status': 'confirmed',
+        'user': request.user.username,
+        'timestamp': time.time()
+    }
+    
+    # Store in session for order confirmation
+    request.session['last_order'] = order_data
+    
+    # Clear the cart
+    request.session['cart'] = []
+    request.session.modified = True
+    
+    messages.success(request, "Your order has been placed successfully!")
+    return redirect('order_confirmation')
 
 @login_required
-def order_confirmation(request, order_id):
+def order_confirmation(request):
     """Display order confirmation."""
-    order = get_object_or_404(Order, id=order_id, user=request.user)
+    order = request.session.get('last_order')
+    
+    if not order:
+        messages.error(request, "No recent order found.")
+        return redirect('menu')
     
     context = {
         'order': order,
-        'items': order.items.all(),
     }
     
     return render(request, 'pizza_app/order_confirmation.html', context)
@@ -371,7 +268,9 @@ def order_confirmation(request, order_id):
 @login_required
 def order_history(request):
     """Display the user's order history."""
-    orders = Order.objects.filter(user=request.user).order_by('-date_ordered')
+    # For demo purposes, show only the last order if it exists
+    last_order = request.session.get('last_order')
+    orders = [last_order] if last_order else []
     
     context = {
         'orders': orders,
@@ -382,10 +281,14 @@ def order_history(request):
 @login_required
 def order_detail(request, order_id):
     """Display details of a specific order."""
-    order = get_object_or_404(Order, id=order_id, user=request.user)
+    last_order = request.session.get('last_order')
+    
+    if not last_order or last_order['id'] != order_id:
+        messages.error(request, "Order not found.")
+        return redirect('order_history')
     
     context = {
-        'order': order
+        'order': last_order
     }
     
     return render(request, 'pizza_app/order_detail.html', context)
@@ -393,13 +296,18 @@ def order_detail(request, order_id):
 @login_required
 def cancel_order(request, order_id):
     """Cancel a pending order."""
-    order = get_object_or_404(Order, id=order_id, user=request.user)
+    last_order = request.session.get('last_order')
     
-    if order.status == 'pending':
-        order.status = 'cancelled'
-        order.save()
-        messages.success(request, f"Order #{order.id} has been cancelled.")
+    if not last_order or last_order['id'] != order_id:
+        messages.error(request, "Order not found.")
+        return redirect('order_history')
+    
+    if last_order['status'] == 'confirmed':
+        last_order['status'] = 'cancelled'
+        request.session['last_order'] = last_order
+        request.session.modified = True
+        messages.success(request, f"Order #{order_id} has been cancelled.")
     else:
         messages.error(request, "This order cannot be cancelled.")
     
-    return redirect('order_detail', order_id=order.id)
+    return redirect('order_detail', order_id=order_id)

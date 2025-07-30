@@ -8,13 +8,7 @@ pip install -r requirements.txt
 echo "Setting up directories..."
 mkdir -p staticfiles_build
 
-# Run Django migrations
-echo "Running database migrations..."
-python manage.py migrate --noinput
-
-# Populate database with initial data
-echo "Populating database with initial data..."
-python manage.py populate_db
+# Note: No database migrations needed - using static data approach
 
 # Run Django collectstatic
 echo "Running collectstatic..."

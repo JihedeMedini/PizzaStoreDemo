@@ -18,13 +18,13 @@ urlpatterns = [
     
     # Cart and checkout
     path('cart/', views.cart, name='cart'),
-    path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
-    path('cart/update/<int:item_id>/', views.update_cart_item, name='update_cart_item'),
+    path('cart/remove/<str:item_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('cart/update/<str:item_id>/', views.update_cart_item, name='update_cart_item'),
     path('checkout/', views.checkout, name='checkout'),
     
     # Orders
-    path('order/confirmation/<int:order_id>/', views.order_confirmation, name='order_confirmation'),
+    path('order/confirmation/', views.order_confirmation, name='order_confirmation'),
     path('orders/', views.order_history, name='order_history'),
-    path('order/<int:order_id>/', views.order_detail, name='order_detail'),
-    path('order/<int:order_id>/cancel/', views.cancel_order, name='cancel_order'),
+    path('order/<str:order_id>/', views.order_detail, name='order_detail'),
+    path('order/<str:order_id>/cancel/', views.cancel_order, name='cancel_order'),
 ] 

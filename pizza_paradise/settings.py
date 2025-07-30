@@ -79,13 +79,23 @@ WSGI_APPLICATION = "pizza_paradise.wsgi.application"
 IS_VERCEL = os.environ.get('VERCEL')
 
 if IS_VERCEL:
-    # Use persistent SQLite database for Vercel
+    # For Vercel deployment, use dummy database (not actually used since we use static data)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / "db.sqlite3",  # Use persistent file instead of memory
+            'NAME': ':memory:',  # In-memory database (not used in our static data approach)
         }
     }
+    
+    # Disable migrations for Vercel deployment
+    class DisableMigrations:
+        def __contains__(self, item):
+            return True
+        def __getitem__(self, item):
+            return None
+    
+    MIGRATION_MODULES = DisableMigrations()
+    
 else:
     # Default SQLite database for development
     DATABASES = {
